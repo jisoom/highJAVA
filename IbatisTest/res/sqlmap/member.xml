@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="member">
+
+	<insert id="insertMember" parameterClass="kr.or.ddit.member.vo.MemberVO">
+	
+		INSERT INTO MYMEMBER(MEM_ID, MEM_NAME, MEM_TEL, MEM_ADDR)
+		VALUES(#memId#, #memName#, #memTel#, #memAddr#)
+		
+	</insert>
+	
+
+	<update id="updateMember" parameterClass="kr.or.ddit.member.vo.MemberVO">
+	
+		UPDATE MYMEMBER 
+		SET MEM_NAME = #memName#, MEM_TEL = #memTel#, MEM_ADDR = #memAddr#
+		WHERE MEM_ID = #memId# 
+		
+	</update>
+	
+	<delete id="deleteMember" parameterClass="String">
+		
+		DELETE FROM MYMEMBER WHERE MEM_ID = #memId#
+		
+	</delete>
+	
+	<!-- select 연습(결과가 여러개일 경우) -->
+<!-- 	<select id="getMemberAll" resultClass="memVO">
+	
+		SELECT MEM_ID AS memId
+		, MEM_NAME AS memName
+		, MEM_TEL AS memTel
+		, MEM_ADDR AS memAddr
+		FROM MYMEMBER
+	
+	</select> -->
+	
+	<resultMap class="memVO" id="memberMap">
+		<result property="memId" column="mem_id"/>
+		<result property="memName" column="mem_name"/>
+		<result property="memTel" column="mem_tel"/>
+		<result property="memAddr" column="mem_addr"/>
+	</resultMap>
+	
+		<select id="getMemberAll" resultMap="memberMap">
+	
+		SELECT MEM_ID 
+		, MEM_NAME
+		, MEM_TEL 
+		, MEM_ADDR
+		FROM MYMEMBER
+	
+	</select>
+	
+	<select id="getMember" resultClass="int">
+	
+		SELECT COUNT(*) AS CNT 
+		FROM MYMEMBER
+		WHERE MEM_ID = #memId#
+		
+	</select>
+	
+	<select id="getSearchMember" parameterClass="memVO" resultMap="memberMap">
+	
+		SELECT * FROM MYMEMBER 
+		WHERE 1=1
+		<isNotEmpty property="memId"> <!-- isNotEmpty : 비어있지 않은 (memId가 값이 비어있지 않으면 수행해라) -->
+		AND MEM_ID = #memId#		
+		</isNotEmpty>
+		
+		<isNotEmpty property="memName">
+		AND MEM_NAME = #memName#
+		</isNotEmpty>
+		
+		<isNotEmpty property="memTel">
+		AND MEM_TEL = #memTel#
+		</isNotEmpty>
+		
+		<isNotEmpty property="memAddr">
+		AND MEM_ADDR LIKE '%' || #memAddr# || '%' 
+		</isNotEmpty>
+		
+	</select>
+	
+</sqlMap>
+
+			
+
+
+
+
+

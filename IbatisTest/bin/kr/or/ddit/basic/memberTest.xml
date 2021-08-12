@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="memberTest">
+<!-- 
+	이 영역에 sql문에 맞는 태그를 사용하여 sql문을 기술한다.
+	
+	사용할 수 있는 기본적인 태그들
+	
+	<select> ~~~ </select>
+	<insert> ~~~ </insert>
+	<update> ~~~ </update>
+	<delete> ~~~ </delete>
+	
+	위 태그에서 사용되는 속성들
+	
+	 1)id : 해당 태그를 호출할 때 <sqlMap>태그의 namespace와 연결하여 사용하는 이름
+	 2)parameterClass속성 : sql문에 사용될 데이터가 들어있는 객체를 지정한다. (보통 VO클래스, 자바의 자료형 이름 등이 사용된다.)
+	 3)resultClass : select문을 실행한 결과를 담을 개체를 지정한다. (보통 VO클래스나 자바의 자료형 이름을 사용한다.)
+	 4)resultMap : 결과 레코드 컬럼명과 VO객체의 property명이 다를 경우에 적절한 매핑을 위해 사용한다.
+	
+ -->
+ 	<!-- insert 연습 -->
+	<insert id="insertMember" parameterClass="kr.or.ddit.member.vo.MemberVO">
+	
+		INSERT INTO MYMEMBER(MEM_ID, MEM_NAME, MEM_TEL, MEM_ADDR)
+		VALUES(#memId#, #memName#, #memTel#, #memAddr#)
+		
+	</insert>
+	
+	<!-- update 연습 -->
+	<update id="updateMember" parameterClass="kr.or.ddit.member.vo.MemberVO">
+	
+		UPDATE MYMEMBER 
+		SET MEM_NAME = #memName#, MEM_TEL = #memTel#, MEM_ADDR = #memAddr#
+		WHERE MEM_ID = #memId# 
+		
+	</update>
+	
+	<!-- delete 연습 -->
+	<!-- 
+		parameterClass에 설정되는 값이 단일값(즉, 1개의 데이터)이면, SQL문에 이 값을 나타내는 변수는
+		특별히 이름이 정해지지 않았다. (즉, 사용자가 임의로 지정할 수 있다.) ==> #memId# 대신 #aaaa#해도 상관 없음
+		
+	 -->
+	<delete id="deleteMember" parameterClass="String">
+		
+		DELETE FROM MYMEMBER WHERE MEM_ID = #memId#
+		
+	</delete>
+	
+	<!-- select 연습(결과가 여러개일 경우) -->
+<!-- 	<select id="getMemberAll" resultClass="memVO">
+	
+		SELECT MEM_ID AS memId
+		, MEM_NAME AS memName
+		, MEM_TEL AS memTel
+		, MEM_ADDR AS memAddr
+		FROM MYMEMBER
+	
+	</select> -->
+	
+	<resultMap class="memVO" id="memberMap">
+		<result property="memId" column="mem_id"/>
+		<result property="memName" column="mem_name"/>
+		<result property="memTel" column="mem_tel"/>
+		<result property="memAddr" column="mem_addr"/>
+	</resultMap>
+	
+		<select id="getMemberAll" resultMap="memberMap">
+	
+		SELECT MEM_ID 
+		, MEM_NAME
+		, MEM_TEL 
+		, MEM_ADDR
+		FROM MYMEMBER
+	
+	</select>
+	
+	<select id="getMember" resultMap="memberMap">
+	
+		SELECT * 
+		FROM MYMEMBER
+		WHERE MEM_ID = #memId#
+		
+	</select>
+	
+</sqlMap>
+
+			
+
+
+
+
+
