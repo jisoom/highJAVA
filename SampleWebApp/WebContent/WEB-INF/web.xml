@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <display-name>SampleWebApp</display-name>
+	
+	
+	<servlet>
+		<servlet-name>WebController</servlet-name>
+		<servlet-class>kr.or.ddit.cmm.controller.WebController</servlet-class>
+		<init-param>
+			<param-name>handler-config</param-name>
+			<param-value>/WEB-INF/handler.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>		
+	<servlet-mapping>
+		<servlet-name>WebController</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<!-- 
+		URL-Mapping에 대하여...
+		
+		1. /로 시작... *로 끝내기 => 경로 매핑용
+		2. *로 시작                      => 확장자에 대한 매핑용
+		3. /                 => 디폴트서블릿 매핑
+		4. 이외 나머지 패턴은 정확한 매핑을 위해 사용됨.
+	
+	   => 매핑이 존재하지 않으면 톰캣의 기본 서블릿인 defaultServlet이 처리함.
+	 -->
+	 
+	 
+	 
+	 <filter>
+	 	<filter-name>CustomCharacterEncoding</filter-name>
+	 	<filter-class>kr.or.ddit.cmm.filter.CustomCharacterEncoding</filter-class>
+	 </filter>
+	 
+	 <filter-mapping>
+	 	<filter-name>CustomCharacterEncoding</filter-name>
+	 	<url-pattern>/*</url-pattern>
+	 </filter-mapping>
+	 
+	 <filter>
+	 	<filter-name>MultipartParser</filter-name>
+	 	<filter-class>kr.or.ddit.cmm.filter.MultipartParser</filter-class>
+	 </filter>
+	 
+	 <filter-mapping>
+	 	<filter-name>MultipartParser</filter-name>
+	 	<url-pattern>/*</url-pattern>
+	 </filter-mapping>
+	 
+	 
+
+</web-app>
